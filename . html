@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Record Keeper – اردو دکان</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400..700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Nastaliq Urdu', sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+        .btn-secondary {
+            background-color: #008CBA; /* Blue */
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #007bb5;
+        }
+         .btn-danger {
+            background-color: #f44336; /* Red */
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #da190b;
+        }
+        .input-field {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box; /* Include padding and border in element's total width */
+            text-align: right; /* Ensure text is right-aligned in input */
+        }
+        .page {
+            display: none; /* Hide pages by default */
+            animation: slideIn 0.5s ease-out;
+        }
+        .page.active {
+            display: block; /* Show active page */
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Specific RTL adjustments if needed, though Tailwind handles much */
+        .text-right {
+            text-align: right;
+        }
+        .text-left {
+             text-align: left; /* Useful for action buttons in table */
+        }
+        th, td {
+            text-align: right; /* Default table text alignment */
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+         th {
+            background-color: #f2f2f2;
+        }
+         table {
+            width: 100%;
+            border-collapse: collapse;
+         }
+    </style>
+</head>
+<body class="p-4">
+
+    <div class="container mx-auto mt-8">
+
+                <div id="dashboard-page" class="page active card">
+            <div class="text-center mb-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto text-green-600">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H9M3 21h3m10.5 0H19M6 21v-7.5a.75.75 0 0 0-.75-.75H3a.75.75 0 0 0-.75.75V21m10.5-18L9.75 3.75M21 10.5l-9.75 1.5L3 10.5m18 0v.008v-.008ZM21 10.5c0 1.03-.159 2.051-.45 3.009-.35.93-.823 1.785-1.398 2.534-1.244 1.65-2.842 2.733-4.644 3.262a39.723 39.723 0 0 1-4.8 0c-1.802-.529-3.4-1.612-4.644-3.262-.575-.749-1.049-1.604-1.398-2.534C3.159 12.551 3 11.53 3 10.5m18 0V9a2.25 2.25 0 0 0-2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25 1.5 1.5 0 0 0-3 0 2.25 2.25 0 0 0-2.25 2.25v.75l-3-.75V6a2.25 2.25 0 0 0-2.25-2.25 1.5 1.5 0 0 0-3 0 2.25 2.25 0 0 0-2.25 2.25v1.5A2.25 2.25 0 0 0 3 9v1.5" />
+                </svg>
+
+                <h1 class="text-2xl font-bold mt-4">کسٹمر ریکارڈ کیپر – اردو دکان</h1>
+                <p class="text-gray-600 mt-2">اپنے گاہکوں کے ریکارڈ کو آسانی سے منظم کریں۔</p>
+            </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button class="btn btn-primary" onclick="showPage('add-customer-page')">نیا کسٹمر شامل کریں</button>
+                <button class="btn btn-secondary" onclick="showPage('customer-list-page')">ریکارڈ لسٹ دیکھیں</button>
+                <button class="btn btn-secondary" onclick="showPage('customer-list-page')">ریکارڈ تلاش کریں</button>
+            </div>
+        </div>
+
+                <div id="add-customer-page" class="page card">
+            <h2 class="text-xl font-bold mb-4">نیا کسٹمر شامل کریں</h2>
+            <form id="add-customer-form">
+                <div class="mb-4">
+                    <label for="customer-name" class="block text-gray-700 text-sm font-bold mb-2">نام:</label>
+                    <input type="text" id="customer-name" class="input-field" required>
+                </div>
+                <div class="mb-4">
+                    <label for="customer-phone" class="block text-gray-700 text-sm font-bold mb-2">فون نمبر:</label>
+                    <input type="tel" id="customer-phone" class="input-field" required>
+                </div>
+                <div class="mb-4">
+                    <label for="customer-address" class="block text-gray-700 text-sm font-bold mb-2">پتہ:</label>
+                    <textarea id="customer-address" class="input-field" rows="3" required></textarea>
+                </div>
+                 <div class="mb-4">
+                    <label for="customer-purchase" class="block text-gray-700 text-sm font-bold mb-2">خریداری کی تفصیل:</label>
+                    <textarea id="customer-purchase" class="input-field" rows="3"></textarea>
+                </div>
+                <div class="flex justify-between">
+                    <button type="submit" class="btn btn-primary">محفوظ کریں</button>
+                    <button type="button" class="btn btn-secondary" onclick="showPage('dashboard-page')">واپسی</button>
+                </div>
+            </form>
+        </div>
+
+                <div id="customer-list-page" class="page card">
+            <h2 class="text-xl font-bold mb-4">کسٹمر لسٹ</h2>
+             <div class="mb-4">
+                                <input type="text" id="search-input" class="input-field" placeholder="نام یا فون نمبر سے تلاش کریں...">
+            </div>
+            <div class="overflow-x-auto">
+                                <table id="customer-table" class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th>نام</th>
+                            <th>فون نمبر</th>
+                            <th>پتہ</th>
+                            <th>خریداری کی تفصیل</th>
+                            <th class="text-left">ایکشن</th>                         </tr>
+                    </thead>
+                    <tbody>
+                                                </tbody>
+                </table>
+            </div>
+            <div class="mt-4 text-left">
+                <button type="button" class="btn btn-secondary" onclick="showPage('dashboard-page')">واپسی</button>
+            </div>
+        </div>
+
+                <div id="edit-customer-page" class="page card">
+            <h2 class="text-xl font-bold mb-4">کسٹمر کی تفصیل ترمیم کریں</h2>
+            <form id="edit-customer-form">
+                                 <input type="hidden" id="edit-customer-id">
+                <div class="mb-4">
+                    <label for="edit-customer-name" class="block text-gray-700 text-sm font-bold mb-2">نام:</label>
+                    <input type="text" id="edit-customer-name" class="input-field" required>
+                </div>
+                <div class="mb-4">
+                    <label for="edit-customer-phone" class="block text-gray-700 text-sm font-bold mb-2">فون نمبر:</label>
+                    <input type="tel" id="edit-customer-phone" class="input-field" required>
+                </div>
+                <div class="mb-4">
+                    <label for="edit-customer-address" class="block text-gray-700 text-sm font-bold mb-2">پتہ:</label>
+                    <textarea id="edit-customer-address" class="input-field" rows="3" required></textarea>
+                </div>
+                 <div class="mb-4">
+                    <label for="edit-customer-purchase" class="block text-gray-700 text-sm font-bold mb-2">خریداری کی تفصیل:</label>
+                    <textarea id="edit-customer-purchase" class="input-field" rows="3"></textarea>
+                </div>
+                <div class="flex justify-between">
+                    <button type="submit" class="btn btn-primary">اپڈیٹ کریں</button>
+                    <button type="button" class="btn btn-secondary" onclick="showPage('customer-list-page')">واپسی</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // Get references to page elements
+        const dashboardPage = document.getElementById('dashboard-page');
+        const addCustomerPage = document.getElementById('add-customer-page');
+        const customerListPage = document.getElementById('customer-list-page');
+        const editCustomerPage = document.getElementById('edit-customer-page');
+
+        // Get form and input references
+        const addCustomerForm = document.getElementById('add-customer-form');
+        const editCustomerForm = document.getElementById('edit-customer-form');
+        const customerTableBody = document.querySelector('#customer-table tbody');
+        const searchInput = document.getElementById('search-input');
+
+        // Function to show a specific page and hide others with animation
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            const activePage = document.getElementById(pageId);
+            if (activePage) {
+                activePage.classList.add('active');
+                 // If navigating to the list page, load customers
+                if (pageId === 'customer-list-page') {
+                    loadCustomers();
+                }
+            }
+        }
+
+        // Function to get customers from LocalStorage
+        function getCustomers() {
+            const customers = localStorage.getItem('customers');
+            return customers ? JSON.parse(customers) : [];
+        }
+
+        // Function to save customers to LocalStorage
+        function saveCustomers(customers) {
+            localStorage.setItem('customers', JSON.stringify(customers));
+        }
+
+        // Function to add a new customer
+        addCustomerForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const name = document.getElementById('customer-name').value;
+            const phone = document.getElementById('customer-phone').value;
+            const address = document.getElementById('customer-address').value;
+            const purchase = document.getElementById('customer-purchase').value;
+
+            // Basic validation
+            if (!name || !phone || !address) {
+                alert('تمام ضروری فیلڈز کو پُر کریں۔'); // Fill all required fields.
+                return;
+            }
+
+            const customers = getCustomers();
+            const newCustomer = {
+                id: Date.now(), // Simple unique ID based on timestamp
+                name: name,
+                phone: phone,
+                address: address,
+                purchase: purchase
+            };
+
+            customers.push(newCustomer);
+            saveCustomers(customers);
+
+            // Clear the form
+            addCustomerForm.reset();
+
+            // Navigate to the customer list page
+            showPage('customer-list-page');
+        });
+
+        // Function to load and display customers in the table
+        function loadCustomers(filter = '') {
+            const customers = getCustomers();
+            customerTableBody.innerHTML = ''; // Clear current table
+
+            const filteredCustomers = customers.filter(customer =>
+                customer.name.toLowerCase().includes(filter.toLowerCase()) ||
+                customer.phone.includes(filter)
+            );
+
+            // Display message if no records are found after filtering
+            if (filteredCustomers.length === 0 && filter !== '') {
+                 const noResultsRow = customerTableBody.insertRow();
+                 const cell = noResultsRow.insertCell(0);
+                 cell.colSpan = 5; // Span across all columns
+                 cell.textContent = 'کوئی ریکارڈ نہیں ملا۔'; // No records found.
+                 cell.classList.add('text-center', 'py-4');
+                 return;
+            } else if (filteredCustomers.length === 0) {
+                 // Display message if no customers have been added yet
+                 const noCustomersRow = customerTableBody.insertRow();
+                 const cell = noCustomersRow.insertCell(0);
+                 cell.colSpan = 5; // Span across all columns
+                 cell.textContent = 'ابھی تک کوئی کسٹمر شامل نہیں کیا گیا۔'; // No customers added yet.
+                 cell.classList.add('text-center', 'py-4');
+                 return;
+            }
+
+            // Populate the table with filtered customer data
+            filteredCustomers.forEach(customer => {
+                const row = customerTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${customer.name}</td>
+                    <td>${customer.phone}</td>
+                    <td>${customer.address}</td>
+                    <td>${customer.purchase || ''}</td>
+                    <td class="text-left">
+                                                <button class="btn btn-secondary btn-sm" onclick="editCustomer(${customer.id})">ترمیم</button>
+                                                <button class="btn btn-danger btn-sm ml-2" onclick="deleteCustomer(${customer.id})">حذف</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Function to populate the edit form with customer data
+        function editCustomer(id) {
+            const customers = getCustomers();
+            const customerToEdit = customers.find(customer => customer.id === id);
+
+            if (customerToEdit) {
+                document.getElementById('edit-customer-id').value = customerToEdit.id;
+                document.getElementById('edit-customer-name').value = customerToEdit.name;
+                document.getElementById('edit-customer-phone').value = customerToEdit.phone;
+                document.getElementById('edit-customer-address').value = customerToEdit.address;
+                document.getElementById('edit-customer-purchase').value = customerToEdit.purchase || ''; // Handle potential undefined
+                showPage('edit-customer-page');
+            }
+        }
+
+        // Function to update a customer record
+        editCustomerForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const id = parseInt(document.getElementById('edit-customer-id').value);
+            const name = document.getElementById('edit-customer-name').value;
+            const phone = document.getElementById('edit-customer-phone').value;
+            const address = document.getElementById('edit-customer-address').value;
+            const purchase = document.getElementById('edit-customer-purchase').value;
+
+             // Basic validation
+            if (!name || !phone || !address) {
+                alert('تمام ضروری فیلڈز کو پُر کریں۔'); // Fill all required fields.
+                return;
+            }
+
+            const customers = getCustomers();
+            const customerIndex = customers.findIndex(customer => customer.id === id);
+
+            if (customerIndex > -1) {
+                customers[customerIndex] = {
+                    id: id,
+                    name: name,
+                    phone: phone,
+                    address: address,
+                    purchase: purchase
+                };
+                saveCustomers(customers);
+                showPage('customer-list-page'); // Navigate back to list after update
+            }
+        });
+
+        // Function to delete a customer record
+        function deleteCustomer(id) {
+            if (confirm('کیا آپ واقعی اس ریکارڈ کو حذف کرنا چاہتے ہیں؟')) { // Confirmation dialog
+                let customers = getCustomers();
+                customers = customers.filter(customer => customer.id !== id); // Filter out the customer to delete
+                saveCustomers(customers); // Save the updated list
+                loadCustomers(); // Reload the list after deletion
+            }
+        }
+
+        // Search functionality: filter the customer list based on input
+        searchInput.addEventListener('input', function() {
+            loadCustomers(searchInput.value);
+        });
+
+
+        // Initial load: Show the dashboard page when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+             showPage('dashboard-page');
+        });
+
+    </script>
+
+</body>
+</html>
